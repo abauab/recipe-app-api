@@ -1,0 +1,16 @@
+#Git  tych plików nie kopiujemy do dockera bo to cala historia aplikacji duzo miejsca
+.git
+.gitignore
+
+#docker standardowo
+.docker
+
+#python kiedy uruchamimamy pythona zapisuje cache a tego tez nie potzreba  wq dockerze
+
+app/__pycache__/
+app/*/__pycache__/
+app/*/*/__pycache__/
+app/*/*/*/__pycache__/
+.env/
+.venv/
+venv/

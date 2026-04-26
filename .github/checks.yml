@@ -1,0 +1,21 @@
+---
+name: Checks
+
+on: [push]  --wyzwalacz
+
+jobs:
+   test-lint: #id joba
+    name: Test and Lint #pryzjazna nazwa do zobaczenia w interfejsie akcji githuba
+    runs-on: ubuntu-Latest #runner, czyli środowisko, na którym będzie wykonywany job    
+    steps: #poszczególne kroki, które będą wykonywane w ramach joba
+      - name: Login to DockerHub
+        uses: docker/login-action@v3 #akcja, która pozwala na zalogowanie się do DockerHuba
+        with:
+           username: ${{ secrets.DOCKERHUB_USERNAME }}
+           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Checkout #, wykonany tylko po zalogowaniu do DockerHuba, ponieważ może być potrzebny do pobrania obrazu z DockerHuba, który jest potrzebny do testów
+        uses: actions/checkout@v4 #akcja, która pozwala na pobranie kodu źródłowego z repozytorium i upewnia sie ,ze kod jest gotowy do uruchomienia
+      - name: Test
+        run: docker run --rm app sh -c "python manage.py test" #uruchomienie testów, które są zdefiniowane w pliku package.json, a do tego potrzebny jest obraz node:14, który jest pobierany z DockerHuba 
+      - name: Lint
+        run: docker run --rm app sh -c "flake8 ." #uruchomienie lintera, który sprawdza poprawność kodu, a do tego potrzebny jest obraz node:14, który jest pobierany z DockerHuba

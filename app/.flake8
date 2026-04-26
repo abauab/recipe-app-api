@@ -1,0 +1,10 @@
+# Flake8 configuration file
+# Flake8 to narzędzie do analizy statycznej kodu Python, które pomaga w utrzymaniu wysokiej jakości kodu 
+# poprzez wykrywanie błędów, niezgodności ze stylem PEP 8 i innych potencjalnych problemów.
+# W tym pliku konfigurujemy Flake8, aby wykluczyć pewne katalogi i pliki z analizy, takie jak migracje, katalog __pycache__, oraz pliki manage.py i settings.py, które często zawierają specyficzne dla projektu konfiguracje i mogą generować fałszywe pozytywy podczas analizy.
+[flake8]
+exclude=
+    migrations,
+    __pycache__,
+    manage.py,
+    settings.py,
