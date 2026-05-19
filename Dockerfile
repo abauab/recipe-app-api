@@ -20,11 +20,22 @@ ARG DEV=false
 # domyślnie false, można ustawić na true podczas budowania obrazu, np.:
 
 # Instalacja pip, zależności i czyszczenie tmp
-RUN python -m pip install --upgrade pip && \
+RUN python -m pip install --upgrade pip setuptools wheel && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        postgresql-client \
+        build-essential \
+        libpq-dev \
+        python3-dev && \
     pip install --no-cache-dir -r /tmp/requirements.txt && \
-    if [ "$DEV" = "true" ]; then pip install --no-cache-dir -r /tmp/requirements.dev.txt; fi && \     
-    # jeśli DEV=true, zainstaluj dodatkowe zależności developerskie
-    rm -rf /tmp
+    if [ "$DEV" = "true" ]; then \
+        pip install --no-cache-dir -r /tmp/requirements.dev.txt; \
+    fi && \
+    apt-get remove -y build-essential python3-dev && \
+    apt-get autoremove -y && \
+    rm -rf /tmp && \
+    rm -rf /var/lib/apt/lists/*
+
 
 #Podczas instalacji pakiety pip czasowo zapisuje pliki w katalogu /tmp. Jeśli ich tam zostawimy:
 #obraz Dockera staje się większy (kilkadziesiąt MB dodatkowych plików)
